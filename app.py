@@ -1,56 +1,58 @@
 from flask import Flask, request
+from flask_smorest import abort
+
+import uuid
+
+from db import items, stores
 
 app = Flask(__name__)
-
-stores = [
-    {
-        "name": "My store",
-        "items": [
-            {"name": "chair", "price": 15.99}
-        ]
-    }
-]
 
 
 @app.route("/stores")
 def get_stores():
-    return {"stores": stores}
+    return {"stores": list(stores.values())}
 
 
-@app.route("/store/<string:name>", methods=["GET"])
-def get_store(name):
-    for store in stores:
-        if store["name"] == name:
-            return store
-    return {"message": "Store was not found"}, 404
-
-
-@app.route("/store/<string:name>/item", methods=["GET"])
-def get_items_in_store(name):
-    for store in stores:
-        if store["name"] == name:
-            return {"items": store["items"]}
-    return {"message": "Store was not found"}, 404
+@app.route("/store/<string:store_id>", methods=["GET"])
+def get_store(store_id):
+    try:
+        return stores[store_id]
+    except:
+        abort(404, message="Store not found")
 
 
 @app.route("/store", methods=["POST"])
 def create_store():
-    request_data = request.get_json()
-    new_store = {"name": request_data["name"], "items": []}
-    stores.append(new_store)
-    return new_store, 201
+    store_data = request.get_json()
+    store_id = uuid.uuid4().hex
+    store = {**store_data, "id": store_id}
+    stores[store_id] = store
+    return store, 201
 
 
-@app.route("/store/<string:name>/item", methods=["POST"])
+@app.route("/item", methods=["POST"])
 def create_item(name):
-    request_data = request.get_json()
-    for store in stores:
-        if store["name"] == name:
-            new_item = {
-                "name": request_data["name"], "price": request_data["price"]}
-            store["items"].append(new_item)
-            return new_item, 201
-    return {"message": "Store was not found"}, 404
+    item_data = request.get_json()
+    if item_data["store_id"] not in stores:
+        abort(404, message="Store not found")
+
+    item_id = uuid.uuid4().hex
+    item = {**item_data, "id": item_id}
+    items[item_id] = item
+    return item, 201
+
+
+@app.route("/items", methods=["GET"])
+def get_items():
+    return {"items": list(items.values())}
+
+
+@app.route("/tem/<string:item_id>", methods=["GET"])
+def get_items_in_store(item_id):
+    try:
+        return items[item_id]
+    except:
+        abort(404, message="Store not found")
 
 
 if __name__ == "__main__":

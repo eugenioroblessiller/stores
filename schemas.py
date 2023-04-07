@@ -23,4 +23,4 @@ class ItemupdateSchema(Schema):
 
 
 class StoreSchema(PlainStoreSchema):
-    items = fields.List(fields.Nested(PlainItemSchema()),  dump_only=True)
+    items = fields.List(fields.Nested(PlainItemSchema()), dump_only=True)

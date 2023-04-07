@@ -1,19 +1,17 @@
 apispec==6.3.0
-autopep8 @ file:///opt/conda/conda-bld/autopep8_1650463822033/work
-certifi @ file:///Users/ec2-user/ci_py311/certifi_1678321191472/work/certifi
+autopep8==2.0.2
 click==8.1.3
 Flask==2.2.3
 flask-smorest==0.41.0
-Flask-SQLAlchemy==3.0.3
+Flask-SQLAlchemy==2.5.1
 greenlet==2.0.2
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.2
 marshmallow==3.19.0
 packaging==23.0
-pycodestyle @ file:///Users/ec2-user/ci_py311/pycodestyle_1678324331308/work
+psycopg2-binary==2.9.6
 SQLAlchemy==2.0.9
-toml @ file:///tmp/build/80754af9/toml_1616166611790/work
 typing_extensions==4.5.0
 webargs==8.2.0
 Werkzeug==2.2.3
